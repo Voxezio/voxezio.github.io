@@ -1,0 +1,42 @@
+body {
+	background-color: #222;
+}
+
+.navbar {
+  display: flex; /* Размещаем элементы внутри навбара в виде строки */
+  justify-content: space-between; /* Распределяем элементы по горизонтали */
+  align-items: center; /* Центрируем элементы по вертикали */
+  background-color: #333;
+  padding: 10px 20px;
+  width: 400px;
+  border-radius: 7px;
+}
+
+.navbar a {
+  color: white;
+  background-color: #4e61bf;
+  text-decoration: none;
+  border-radius: 7px;
+  height: 25px;
+  width: 20%;
+  text-align: center;
+  padding-top: 1%;
+  font-family: 'Open Sans', sans-serif;
+  margin-top: inherit;
+}
+
+.maybe-logo {
+	text-decoration: none;
+	background-color: #fff;
+	border-radius: 7px;
+	height: 60px;
+	width: 60px;
+	text-align: center;
+	padding-top: 1%;
+	font-family: 'Open Sans', sans-serif;
+
+	display: flex; /* Размещаем элементы внутри навбара в виде строки */
+	justify-content: space-between; /* Распределяем элементы по горизонтали */
+	align-items: center; /* Центрируем элементы по вертикали */
+	padding: 10px 20px;
+}
