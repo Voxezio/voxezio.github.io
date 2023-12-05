@@ -3,9 +3,9 @@ body {
 }
 
 .navbar {
-  display: flex; /* Размещаем элементы внутри навбара в виде строки */
-  justify-content: space-between; /* Распределяем элементы по горизонтали */
-  align-items: center; /* Центрируем элементы по вертикали */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #333;
   padding: 10px 20px;
   width: 400px;
@@ -35,8 +35,8 @@ body {
 	padding-top: 1%;
 	font-family: 'Open Sans', sans-serif;
 
-	display: flex; /* Размещаем элементы внутри навбара в виде строки */
-	justify-content: space-between; /* Распределяем элементы по горизонтали */
-	align-items: center; /* Центрируем элементы по вертикали */
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	padding: 10px 20px;
 }
