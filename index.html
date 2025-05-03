@@ -1,16 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Мой веб-сайт</title>
-  <link rel="stylesheet" href="https://voxezio.github.io/stylesheet.css">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>GitHub Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet"/>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div class="navbar">
-  	<div class="maybe-logo">Just Voxezio :)</div>
-    <a href="/">Главная</a>
-    <a href="#texts">Тексты</a>
-    <a href="projects">Проекты</a>
-  </div>
+    <nav class="navbar">
+        <a href="#" class="nav-brand">MyName</a>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#skills">Skills</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Hello, I'm MyName 👋</h1>
+        <p>Full Stack Developer | Open Source Contributor | Tech Enthusiast</p>
+        <div class="social-icons">
+            <a href="https://github.com/yourusername" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/yourprofile" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            <a href="mailto:your@email.com"><i class="fas fa-envelope"></i></a>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2>About Me</h2>
+        <p class="centered-text">
+            I'm a software developer passionate about building modern web applications and contributing to open source projects. With experience in both frontend and backend development, I love creating solutions that make a difference.
+        </p>
+    </section>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <p class="centered-text">Check out my GitHub profile to see my latest projects and contributions.</p>
+    </section>
+
+    <section id="skills">
+        <h2>Skills</h2>
+        <p class="centered-text">JavaScript | React | Node.js | Python | Git & GitHub | UI/UX Design</p>
+    </section>
+
+    <section id="contact">
+        <h2>Contact</h2>
+        <p class="centered-text">Email: your@email.com | GitHub: github.com/yourusername</p>
+    </section>
 </body>
 </html>
