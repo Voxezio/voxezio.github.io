@@ -162,7 +162,7 @@ function loadCustomGame() {
   let url = input;
   const pastebinMatch = input.match(/pastebin\.com\/([a-zA-Z0-9]+)/);
   if (pastebinMatch) {
-    url = `https://pastebin.com/dl/${pastebinMatch[1]}`;
+    url = `https://pastebin.com/raw/${pastebinMatch[1]}`;
   }
 
   loadGame(url);
