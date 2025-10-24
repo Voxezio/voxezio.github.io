@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тёмная страница</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #eee;
+  }
+
+  /* Navbar */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1f1f1f;
+    padding: 10px 20px;
+  }
+
+  .navbar a {
+    color: #eee;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s;
+  }
+
+  .navbar a:hover {
+    color: #1abc9c;
+  }
+
+  .navbar .logo {
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+
+  /* Контент */
+  .content {
+    padding: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="logo">МойСайт</div>
+  <div class="links">
+    <a href="#">Главная</a>
+    <a href="#">О нас</a>
+    <a href="#">Контакты</a>
+  </div>
+</div>
+
+<div class="content">
+  <h1>Добро пожаловать!</h1>
+  <p>Это простая тёмная страница с навигацией.</p>
+</div>
+
+</body>
+</html>
