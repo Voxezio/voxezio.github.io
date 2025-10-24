@@ -157,10 +157,19 @@ function startNewGame() {
 function loadCustomGame() {
   const input = document.getElementById('game-url').value.trim();
   if (!input) return;
-  loadGame(input);
-  gameUrl = input;
+
+  // Если это ссылка pastebin, автоматически заменяем на raw
+  let url = input;
+  const pastebinMatch = input.match(/pastebin\.com\/([a-zA-Z0-9]+)/);
+  if (pastebinMatch) {
+    url = `https://pastebin.com/raw/${pastebinMatch[1]}`;
+  }
+
+  loadGame(url);
+  gameUrl = url;
   closeSettingsModal();
 }
+
 
 /* === Инициализация === */
 window.onload = () => {
