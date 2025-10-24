@@ -4,7 +4,7 @@ let currentScene = null;
 let gameUrl = 'game.json';
 let locked = false;
 
-/* === Основная загрузка игры === */
+/* === Загрузка игры по URL === */
 async function loadGame(url = gameUrl) {
   try {
     const res = await fetch(url);
@@ -12,14 +12,13 @@ async function loadGame(url = gameUrl) {
 
     let text = await res.text();
 
-    // Если JSON внутри <pre> и в кавычках
+    // Если JSON в кавычках <pre>
     if (text.startsWith('"') && text.endsWith('"')) {
       text = text.slice(1, -1).replace(/\\"/g, '"');
     }
 
     gameData = JSON.parse(text);
 
-    // загружаем первую сцену
     const firstChapter = Object.keys(gameData.chapters)[0];
     const firstScene = Object.keys(gameData.chapters[firstChapter])[0];
     const saved = localStorage.getItem('currentScene');
@@ -31,6 +30,24 @@ async function loadGame(url = gameUrl) {
   }
 }
 
+/* === Универсальная загрузка по input (Pastebin/Local/Direct) === */
+async function loadCustomGame(inputUrl) {
+  if (!inputUrl) return;
+
+  let url = inputUrl.trim();
+
+  // Pastebin -> raw
+  const pastebinMatch = url.match(/pastebin\.com\/([a-zA-Z0-9]+)/);
+  if (pastebinMatch) {
+    url = `https://pastebin.com/raw/${pastebinMatch[1]}`;
+    const proxy = 'https://cors-anywhere.herokuapp.com/';
+    url = proxy + url; // обход CORS
+  }
+
+  await loadGame(url);
+  gameUrl = url;
+  closeSettingsModal();
+}
 
 /* === Плавная смена сцены === */
 async function loadScene(path, instant = false) {
@@ -49,7 +66,6 @@ async function loadScene(path, instant = false) {
   const btns = document.getElementById('buttons');
   const id = document.getElementById('scene-id');
 
-  // скрытие старого текста, кнопок и фона
   if (!instant) {
     text.classList.remove('visible');
     btns.classList.remove('visible');
@@ -57,7 +73,6 @@ async function loadScene(path, instant = false) {
     await wait(350);
   }
 
-  // установка новой сцены
   currentChapter = chapter;
   currentScene = sceneName;
   id.textContent = `${gameData.title} — ${chapter} — ${sceneName}`;
@@ -65,25 +80,32 @@ async function loadScene(path, instant = false) {
   text.textContent = scene.text;
   btns.innerHTML = '';
 
-  Object.values(scene.buttons).forEach((b, i) => {
+  Object.values(scene.buttons || {}).forEach((b, i) => {
     const btn = document.createElement('button');
     btn.className = 'button';
     btn.textContent = b.text;
     btn.style.transitionDelay = `${i * 80}ms`;
+
     btn.onclick = async () => {
       await fadeOutScene();
-      loadScene(b.next);
+
+      if (b.load_game) {
+        await loadCustomGame(b.load_game);
+        return;
+      }
+      if (b.next) {
+        loadScene(b.next);
+      }
     };
+
     btns.appendChild(btn);
   });
 
   saveProgress();
 
-  // принудительный reflow
   void text.offsetWidth;
   void bg.offsetWidth;
 
-  // плавное появление
   bg.classList.add('visible');
   text.classList.add('visible');
   btns.classList.add('visible');
@@ -91,7 +113,6 @@ async function loadScene(path, instant = false) {
   locked = false;
 }
 
-/* === Скрытие сцены === */
 async function fadeOutScene() {
   const text = document.getElementById('scene-text');
   const btns = document.getElementById('buttons');
@@ -102,12 +123,8 @@ async function fadeOutScene() {
   await wait(300);
 }
 
-/* === Утилиты === */
 function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-function saveProgress() {
-  localStorage.setItem('currentScene', `${currentChapter}:${currentScene}`);
-}
+function saveProgress() { localStorage.setItem('currentScene', `${currentChapter}:${currentScene}`); }
 
 /* === Сохранения === */
 function addManualSave() {
@@ -142,21 +159,12 @@ function exportAllSaves() {
 }
 
 /* === Модальные окна === */
-function openSaveModal() {
-  updateSaveList();
-  document.getElementById('save-modal').classList.remove('hidden');
-}
-function closeSaveModal() {
-  document.getElementById('save-modal').classList.add('hidden');
-}
-function openSettingsModal() {
-  document.getElementById('settings-modal').classList.remove('hidden');
-}
-function closeSettingsModal() {
-  document.getElementById('settings-modal').classList.add('hidden');
-}
+function openSaveModal() { updateSaveList(); document.getElementById('save-modal').classList.remove('hidden'); }
+function closeSaveModal() { document.getElementById('save-modal').classList.add('hidden'); }
+function openSettingsModal() { document.getElementById('settings-modal').classList.remove('hidden'); }
+function closeSettingsModal() { document.getElementById('settings-modal').classList.add('hidden'); }
 
-/* === Новая игра / Смена JSON === */
+/* === Новая игра === */
 function startNewGame() {
   localStorage.removeItem('currentScene');
   const firstChapter = Object.keys(gameData.chapters)[0];
@@ -164,42 +172,17 @@ function startNewGame() {
   loadScene(`${firstChapter}:${firstScene}`);
 }
 
-async function loadCustomGame(inputUrl) {
-  if (!inputUrl) return;
-
-  let url = inputUrl.trim();
-
-  // --- Проверка Pastebin ---
-  const pastebinMatch = url.match(/pastebin\.com\/([a-zA-Z0-9]+)/);
-  if (pastebinMatch) {
-    // raw URL для Pastebin
-    url = `https://pastebin.com/raw/${pastebinMatch[1]}`;
-    // если нужен прокси для обхода CORS
-    const proxy = 'https://cors-anywhere.herokuapp.com/';
-    url = proxy + url;
-  }
-
-  await loadGame(url);
-  gameUrl = url;
-  closeSettingsModal();
-}
-
-
 /* === Инициализация === */
 window.onload = () => {
   loadGame();
 
   document.getElementById('load-btn').onclick = openSaveModal;
-  document.getElementById('save-btn').onclick = () => {
-    addManualSave();
-    alert('Сохранение создано.');
-  };
+  document.getElementById('save-btn').onclick = () => { addManualSave(); alert('Сохранение создано.'); };
   document.getElementById('newgame-btn').onclick = startNewGame;
   document.getElementById('settings-btn').onclick = openSettingsModal;
 
   document.getElementById('close-save-modal').onclick = closeSaveModal;
   document.getElementById('close-settings-modal').onclick = closeSettingsModal;
-
   document.getElementById('export-saves-btn').onclick = exportAllSaves;
-  document.getElementById('load-json-btn').onclick = loadCustomGame;
+  document.getElementById('load-json-btn').onclick = () => loadCustomGame(document.getElementById('game-url').value);
 };
