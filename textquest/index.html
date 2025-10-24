@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Game</title>
+  <link rel="stylesheet" href="game.css">
+  <script defer src="game.js"></script>
+</head>
+<body>
+  <div id="game-wrapper">
+    <nav id="navbar">
+      <button class="nav-btn" id="load-btn" title="Загрузить сохранение">
+        <img src="images/cloud-download-svgrepo-com.svg" alt="load">
+      </button>
+      <button class="nav-btn" id="save-btn" title="Сохранить игру">
+        <img src="images/cloud-upload-svgrepo-com.svg" alt="save">
+      </button>
+      <button class="nav-btn" id="newgame-btn" title="Новая игра">
+        <img src="images/refresh-svgrepo-com.svg" alt="newgame">
+      </button>
+      <button class="nav-btn" id="settings-btn" title="Настройки">
+        <img src="images/settings-svgrepo-com.svg" alt="settings">
+      </button>
+    </nav>
+
+    <div id="scene" class="scene">
+      <div id="scene-bg"></div>
+      <div id="scene-text-container">
+        <div id="scene-text"></div>
+      </div>
+      <div id="buttons"></div>
+      <div id="scene-id"></div>
+    </div>
+  </div>
+
+  <!-- Модальное окно сохранений -->
+  <div id="save-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Сохранения</h3>
+      <ul id="save-list"></ul>
+      <button id="close-save-modal" class="button">Закрыть</button>
+    </div>
+  </div>
+
+  <!-- Модальное окно настроек -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Настройки</h3>
+      <input id="game-url" type="text" placeholder="URL или имя JSON-файла" style="width:100%;padding:0.4rem;">
+      <button id="load-json-btn" class="button">Загрузить новую игру</button>
+      <hr style="margin:1rem 0;border-color:#333;">
+      <button id="export-saves-btn" class="button">Экспортировать все сохранения</button>
+      <button id="clear-saves-btn" class="button">Удалить все сохранения</button>
+      <button id="close-settings-modal" class="button">Закрыть</button>
+    </div>
+  </div>
+</body>
+</html>
