@@ -1,132 +1,109 @@
 let gameData = {};
-let currentScene = null;
 let currentChapter = null;
+let currentScene = null;
 let gameUrl = 'game.json';
+let locked = false;
 
-async function loadGame(fromUrl = false) {
-  const url = fromUrl || gameUrl;
+/* === Основная загрузка игры === */
+async function loadGame(url = gameUrl) {
   try {
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`Не удалось загрузить ${url}`);
+    if (!res.ok) throw new Error(`Ошибка загрузки: ${url}`);
     gameData = await res.json();
-    const firstChapter = Object.keys(gameData.chapters)[0];
-    const firstScene = Object.keys(gameData.chapters[firstChapter])[0];
-    const savedScene = localStorage.getItem('currentScene');
-    loadScene(savedScene || `${firstChapter}:${firstScene}`);
-  } catch(e) {
+
+    const startChapter = Object.keys(gameData.chapters)[0];
+    const startScene = Object.keys(gameData.chapters[startChapter])[0];
+    const saved = localStorage.getItem('currentScene');
+
+    loadScene(saved || `${startChapter}:${startScene}`, true);
+  } catch (e) {
     console.error(e);
-    document.getElementById('scene-text').textContent = "Ошибка загрузки игры.";
+    document.getElementById('scene-text').textContent = 'Ошибка загрузки JSON.';
   }
 }
 
-function loadScene(scenePath) {
-  let chapter, sceneName;
-  if (scenePath.includes(':')) {
-    [chapter, sceneName] = scenePath.split(':');
-  } else {
-    chapter = Object.keys(gameData.chapters)[0];
-    sceneName = scenePath;
+/* === Плавная смена сцены === */
+async function loadScene(path, instant = false) {
+  if (locked) return;
+  locked = true;
+
+  const [chapter, sceneName] = path.includes(':')
+    ? path.split(':')
+    : [Object.keys(gameData.chapters)[0], path];
+
+  const scene = gameData.chapters?.[chapter]?.[sceneName];
+  if (!scene) { locked = false; return; }
+
+  const text = document.getElementById('scene-text');
+  const bg = document.getElementById('scene-bg');
+  const btns = document.getElementById('buttons');
+  const id = document.getElementById('scene-id');
+
+  // скрытие старого текста, кнопок и фона
+  if (!instant) {
+    text.classList.remove('visible');
+    btns.classList.remove('visible');
+    bg.classList.remove('visible');
+    await wait(350);
   }
 
-  const scene = gameData.chapters[chapter][sceneName];
-  if (!scene) return;
+  // установка новой сцены
   currentChapter = chapter;
   currentScene = sceneName;
-
-  const bg = document.getElementById('scene-bg');
-  const text = document.getElementById('scene-text');
-  const btnsContainer = document.getElementById('buttons');
-  const sceneId = document.getElementById('scene-id');
-
+  id.textContent = `${gameData.title} — ${chapter} — ${sceneName}`;
   bg.style.backgroundImage = `url(${scene.bgimage})`;
   text.textContent = scene.text;
-  btnsContainer.innerHTML = '';
-  sceneId.textContent = `${gameData.title} — ${currentChapter} — ${sceneName}`;
+  btns.innerHTML = '';
 
-  const btnArray = Object.values(scene.buttons);
-  let i = 0;
-
-  while (i < btnArray.length) {
-    const row = document.createElement('div');
-    row.className = 'button-row';
-
-    // 1. Длинная кнопка
-    if (i < btnArray.length) {
-      const b = btnArray[i++];
-      const btn = createSceneButton(b, 'button-long');
-      row.appendChild(btn);
-    }
-
-    // 2. Две средние кнопки
-    const mediumBtns = [];
-    for (let j = 0; j < 2 && i < btnArray.length; j++, i++) {
-      const b = btnArray[i];
-      mediumBtns.push(createSceneButton(b, 'button-medium'));
-    }
-    mediumBtns.forEach(b => row.appendChild(b));
-
-    // 3. Две средние + одна длинная снизу
-    if (i < btnArray.length) {
-      const row3 = document.createElement('div');
-      row3.className = 'button-row';
-      for (let j = 0; j < 2 && i < btnArray.length; j++, i++) {
-        const b = btnArray[i];
-        const btn = createSceneButton(b, 'button-medium');
-        row3.appendChild(btn);
-      }
-      if (i < btnArray.length) {
-        const b = btnArray[i++];
-        const btn = createSceneButton(b, 'button-long');
-        row3.appendChild(btn);
-      }
-      btnsContainer.appendChild(row3);
-      continue;
-    }
-
-    // 4. Четыре средние кнопки
-    if (i + 4 <= btnArray.length) {
-      const row4 = document.createElement('div');
-      row4.className = 'button-row';
-      for (let j = 0; j < 4 && i < btnArray.length; j++, i++) {
-        const b = btnArray[i];
-        const btn = createSceneButton(b, 'button-small');
-        row4.appendChild(btn);
-      }
-      btnsContainer.appendChild(row4);
-      continue;
-    }
-
-    btnsContainer.appendChild(row);
-  }
+  Object.values(scene.buttons).forEach((b, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'button';
+    btn.textContent = b.text;
+    btn.style.transitionDelay = `${i * 80}ms`;
+    btn.onclick = async () => {
+      await fadeOutScene();
+      loadScene(b.next);
+    };
+    btns.appendChild(btn);
+  });
 
   saveProgress();
-  document.getElementById('scene-text-container').scrollTop = 0;
+
+  // принудительный reflow
+  void text.offsetWidth;
+  void bg.offsetWidth;
+
+  // плавное появление
+  bg.classList.add('visible');
+  text.classList.add('visible');
+  btns.classList.add('visible');
+
+  locked = false;
 }
 
-function createSceneButton(b, sizeClass) {
-  const btn = document.createElement('button');
-  btn.textContent = b.text;
-  btn.className = `button ${sizeClass || ''}`;
-  btn.onclick = () => {
-    saveProgress();
-    loadScene(b.next);
-  };
-  return btn;
+/* === Скрытие сцены === */
+async function fadeOutScene() {
+  const text = document.getElementById('scene-text');
+  const btns = document.getElementById('buttons');
+  const bg = document.getElementById('scene-bg');
+  text.classList.remove('visible');
+  btns.classList.remove('visible');
+  bg.classList.remove('visible');
+  await wait(300);
 }
+
+/* === Утилиты === */
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 function saveProgress() {
   localStorage.setItem('currentScene', `${currentChapter}:${currentScene}`);
 }
 
+/* === Сохранения === */
 function addManualSave() {
   const saves = JSON.parse(localStorage.getItem('saves') || '[]');
   const date = new Date().toLocaleString();
-  saves.push({
-    title: gameData.title,
-    chapter: currentChapter,
-    scene: currentScene,
-    date
-  });
+  saves.push({ title: gameData.title, chapter: currentChapter, scene: currentScene, date });
   localStorage.setItem('saves', JSON.stringify(saves));
 }
 
@@ -154,30 +131,22 @@ function exportAllSaves() {
   a.click();
 }
 
-function clearAllSaves() {
-  localStorage.removeItem('saves');
-  localStorage.removeItem('currentScene');
-  updateSaveList();
-  alert('Все сохранения удалены.');
-}
-
+/* === Модальные окна === */
 function openSaveModal() {
   updateSaveList();
   document.getElementById('save-modal').classList.remove('hidden');
 }
-
 function closeSaveModal() {
   document.getElementById('save-modal').classList.add('hidden');
 }
-
 function openSettingsModal() {
   document.getElementById('settings-modal').classList.remove('hidden');
 }
-
 function closeSettingsModal() {
   document.getElementById('settings-modal').classList.add('hidden');
 }
 
+/* === Новая игра / Смена JSON === */
 function startNewGame() {
   localStorage.removeItem('currentScene');
   const firstChapter = Object.keys(gameData.chapters)[0];
@@ -193,6 +162,7 @@ function loadCustomGame() {
   closeSettingsModal();
 }
 
+/* === Инициализация === */
 window.onload = () => {
   loadGame();
 
@@ -208,6 +178,5 @@ window.onload = () => {
   document.getElementById('close-settings-modal').onclick = closeSettingsModal;
 
   document.getElementById('export-saves-btn').onclick = exportAllSaves;
-  document.getElementById('clear-saves-btn').onclick = clearAllSaves;
   document.getElementById('load-json-btn').onclick = loadCustomGame;
 };
