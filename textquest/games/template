@@ -1,116 +1,23 @@
 {
-  "title": "Путь странника",
+  "title": "Пример Игры",
   "chapters": {
     "Глава 1": {
-      "start": {
-        "text": "Ты очнулся на лесной поляне. Туман стелется между деревьями, и слышен странный шёпот.",
+      "scene1": {
+        "text": "Начало первой главы.",
+        "bgimage": "images/bg1.jpg",
         "buttons": {
-          "explore": { "text": "Пойти в лес", "next": "forest_path" },
-          "wait": { "text": "Остаться на месте", "next": "stay_put" }
+          "btn1": {"text": "Следующая сцена", "next": "Глава 1:scene2"},
+          "btn2": {"text": "Загрузить другую игру", "load_game": "game2.json"}
         }
       },
-      "forest_path": {
-        "text": "Ты идёшь по тропинке и находишь развилку: направо слышен шум воды, налево темнеет лес.",
-        "buttons": {
-          "right": { "text": "К реке", "next": "river" },
-          "left": { "text": "Вглубь леса", "next": "deep_forest" }
-        }
-      },
-      "stay_put": {
-        "text": "Ты ждёшь, но туман сгущается, и кто-то приближается к тебе из-за деревьев.",
-        "buttons": {
-          "greet": { "text": "Поздороваться", "next": "stranger" },
-          "run": { "text": "Убежать", "next": "run_away" }
-        }
-      },
-      "river": {
-        "text": "У реки ты видишь старую лодку и мост через воду.",
-        "buttons": {
-          "boat": { "text": "Переплыть на лодке", "next": "boat_ride" },
-          "bridge": { "text": "Перейти по мосту", "next": "cross_bridge" }
-        }
-      },
-      "deep_forest": {
-        "text": "В глубине леса ты находишь странный круг из камней с древними рунами.",
-        "buttons": {
-          "inspect": { "text": "Осмотреть руны", "next": "runes" },
-          "ignore": { "text": "Идти дальше", "next": "forest_clearing" }
-        }
-      },
-      "stranger": {
-        "text": "Перед тобой появляется старик в плаще. Он предлагает помощь или предупреждение о лесной опасности.",
-        "buttons": {
-          "accept": { "text": "Принять помощь", "next": "guide" },
-          "decline": { "text": "Отказаться", "next": "lost_in_fog" }
-        }
-      },
-      "run_away": {
-        "text": "Ты пытаешься убежать, но туман окружает тебя и ты теряешься в лесу.",
-        "buttons": {
-          "call_for_help": { "text": "Звать на помощь", "next": "help_arrives" },
-          "hide": { "text": "Спрятаться", "next": "hidden_spot" }
-        }
-      }
+      "scene2": {"text":"Сцена 2","bgimage":"images/bg2.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 1:scene3"}}},
+      "scene3": {"text":"Сцена 3","bgimage":"images/bg3.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 1:scene4"}}},
+      "scene4": {"text":"Сцена 4","bgimage":"images/bg4.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 1:scene5"}}},
+      "scene5": {"text":"Сцена 5","bgimage":"images/bg5.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 1:scene6"}}},
+      "scene6": {"text":"Сцена 6","bgimage":"images/bg6.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 1:scene7"}}},
+      "scene7": {"text":"Сцена 7","bgimage":"images/bg7.jpg","buttons":{"btn1":{"text":"Конец главы","next":"Глава 2:scene1"}}}
     },
     "Глава 2": {
-      "guide": {
-        "text": "Старик ведёт тебя к деревне, где люди готовятся к странному ритуалу.",
-        "buttons": {
-          "join": { "text": "Присоединиться к ритуалу", "next": "ritual" },
-          "observe": { "text": "Наблюдать издалека", "next": "observe_ritual" }
-        }
-      },
-      "lost_in_fog": {
-        "text": "Ты бродишь в тумане. Внезапно перед тобой открывается светлая поляна с хижиной.",
-        "buttons": {
-          "enter": { "text": "Войти в хижину", "next": "cabin" },
-          "avoid": { "text": "Обойти хижину", "next": "forest_edge" }
-        }
-      },
-      "boat_ride": {
-        "text": "Ты переплываешь реку и попадаешь в заброшенную крепость.",
-        "buttons": {
-          "explore": { "text": "Исследовать крепость", "next": "castle_hall" },
-          "rest": { "text": "Отдохнуть на берегу", "next": "river_rest" }
-        }
-      },
-      "cross_bridge": {
-        "text": "На мосту скрипит доска, и ты видишь внизу бурлящую воду.",
-        "buttons": {
-          "careful": { "text": "Идти осторожно", "next": "safe_crossing" },
-          "rush": { "text": "Бежать", "next": "fall_into_river" }
-        }
-      },
-      "runes": {
-        "text": "Руны начинают светиться. Ты ощущаешь прилив сил и видишь видение пути.",
-        "buttons": {
-          "follow": { "text": "Следовать видению", "next": "hidden_path" },
-          "step_back": { "text": "Отойти", "next": "forest_clearing" }
-        }
-      }
-    },
-    "Глава 3": {
-      "ritual": {
-        "text": "Ритуал переносит тебя в другой мир с летающими островами и странными существами.",
-        "buttons": {
-          "explore": { "text": "Исследовать мир", "next": "floating_islands" },
-          "stay": { "text": "Остаться на месте", "next": "ritual_end" }
-        }
-      },
-      "observe_ritual": {
-        "text": "Ты видишь магический портал, открывающийся на глазах жителей деревни.",
-        "buttons": {
-          "enter_portal": { "text": "Войти в портал", "next": "floating_islands" },
-          "leave": { "text": "Уйти из деревни", "next": "forest_edge" }
-        }
-      },
-      "castle_hall": {
-        "text": "В зале замка стоят древние трон и сундуки с тайными предметами.",
-        "buttons": {
-          "open_chest": { "text": "Открыть сундук", "next": "treasure" },
-          "sit_on_throne": { "text": "Сесть на трон", "next": "throne_power" }
-        }
-      }
-    }
-  }
-}
+      "scene1": {"text":"Глава 2, Сцена 1","bgimage":"images/bg1.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 2:scene2"}}},
+      "scene2": {"text":"Глава 2, Сцена 2","bgimage":"images/bg2.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 2:scene3"}}},
+      "scene3": {"text":"Глава 2, Сцена 3","bgimage":"images/bg3.jpg","buttons":{"btn1":{"text":"Далее","next
