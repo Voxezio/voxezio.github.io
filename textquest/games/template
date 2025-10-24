@@ -20,4 +20,20 @@
     "Глава 2": {
       "scene1": {"text":"Глава 2, Сцена 1","bgimage":"images/bg1.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 2:scene2"}}},
       "scene2": {"text":"Глава 2, Сцена 2","bgimage":"images/bg2.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 2:scene3"}}},
-      "scene3": {"text":"Глава 2, Сцена 3","bgimage":"images/bg3.jpg","buttons":{"btn1":{"text":"Далее","next
+      "scene3": {"text":"Глава 2, Сцена 3","bgimage":"images/bg3.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 2:scene4"}}},
+      "scene4": {"text":"Глава 2, Сцена 4","bgimage":"images/bg4.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 2:scene5"}}},
+      "scene5": {"text":"Глава 2, Сцена 5","bgimage":"images/bg5.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 2:scene6"}}},
+      "scene6": {"text":"Глава 2, Сцена 6","bgimage":"images/bg6.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 2:scene7"}}},
+      "scene7": {"text":"Сцена 7","bgimage":"images/bg7.jpg","buttons":{"btn1":{"text":"Конец главы","next":"Глава 3:scene1"}}}
+    },
+    "Глава 3": {
+      "scene1": {"text":"Глава 3, Сцена 1","bgimage":"images/bg1.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 3:scene2"}}},
+      "scene2": {"text":"Глава 3, Сцена 2","bgimage":"images/bg2.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 3:scene3"}}},
+      "scene3": {"text":"Глава 3, Сцена 3","bgimage":"images/bg3.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 3:scene4"}}},
+      "scene4": {"text":"Глава 3, Сцена 4","bgimage":"images/bg4.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 3:scene5"}}},
+      "scene5": {"text":"Глава 3, Сцена 5","bgimage":"images/bg5.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 3:scene6"}}},
+      "scene6": {"text":"Глава 3, Сцена 6","bgimage":"images/bg6.jpg","buttons":{"btn1":{"text":"Далее","next":"Глава 3:scene7"}}},
+      "scene7": {"text":"Сцена 7","bgimage":"images/bg7.jpg","buttons":{"btn1":{"text":"Конец игры"}}}
+    }
+  }
+}
