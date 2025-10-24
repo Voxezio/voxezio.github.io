@@ -48,6 +48,7 @@ html, body {
   transform: scale(1.1);
 }
 
+/* === Сцена === */
 .scene {
   flex: 1;
   position: relative;
@@ -62,6 +63,11 @@ html, body {
   inset: 0;
   background-size: cover;
   background-position: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+#scene-bg.visible {
   opacity: 0.5;
 }
 
@@ -71,12 +77,21 @@ html, body {
   z-index: 1;
   position: relative;
   margin-bottom: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: #333 #111;
 }
 
 #scene-text {
+  opacity: 0;
+  transition: opacity 0.4s ease;
   white-space: pre-wrap;
   text-shadow: 0 0 5px black;
   line-height: 1.4;
+  padding: 0.3rem 0;
+}
+
+#scene-text.visible {
+  opacity: 1;
 }
 
 #buttons {
@@ -84,6 +99,12 @@ html, body {
   flex-direction: column;
   gap: 0.5rem;
   z-index: 1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+#buttons.visible {
+  opacity: 1;
 }
 
 .button {
@@ -93,7 +114,14 @@ html, body {
   color: white;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, opacity 0.4s ease, transform 0.4s ease;
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+#buttons.visible .button {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .button:hover {
@@ -107,7 +135,7 @@ html, body {
   margin-top: 0.5rem;
 }
 
-/* --- Модальные окна --- */
+/* === Модальные окна === */
 .modal {
   position: fixed;
   inset: 0;
@@ -146,23 +174,4 @@ html, body {
 
 #save-list li:hover {
   background: rgba(255,255,255,0.1);
-}
-
-/* --- Кнопки по ширине --- */
-.button-row {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.button-long {
-  flex: 1 1 100%;
-}
-
-.button-medium {
-  flex: 1 1 48%;
-}
-
-.button-small {
-  flex: 1 1 22%;
 }
