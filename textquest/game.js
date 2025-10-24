@@ -9,17 +9,17 @@ async function loadGame(url = gameUrl) {
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Ошибка загрузки: ${url}`);
+
     let text = await res.text();
 
-    // если строка в кавычках, убираем их
+    // Если JSON внутри <pre> и в кавычках
     if (text.startsWith('"') && text.endsWith('"')) {
-      text = text.slice(1, -1);
-      // распарсим экранированные кавычки
-      text = text.replace(/\\"/g, '"');
+      text = text.slice(1, -1).replace(/\\"/g, '"');
     }
 
     gameData = JSON.parse(text);
 
+    // загружаем первую сцену
     const firstChapter = Object.keys(gameData.chapters)[0];
     const firstScene = Object.keys(gameData.chapters[firstChapter])[0];
     const saved = localStorage.getItem('currentScene');
@@ -164,18 +164,22 @@ function startNewGame() {
   loadScene(`${firstChapter}:${firstScene}`);
 }
 
-function loadCustomGame() {
-  const input = document.getElementById('game-url').value.trim();
-  if (!input) return;
+async function loadCustomGame(inputUrl) {
+  if (!inputUrl) return;
 
-  // Если это ссылка pastebin, автоматически заменяем на raw
-  let url = input;
-  const pastebinMatch = input.match(/pastebin\.com\/([a-zA-Z0-9]+)/);
+  let url = inputUrl.trim();
+
+  // --- Проверка Pastebin ---
+  const pastebinMatch = url.match(/pastebin\.com\/([a-zA-Z0-9]+)/);
   if (pastebinMatch) {
+    // raw URL для Pastebin
     url = `https://pastebin.com/raw/${pastebinMatch[1]}`;
+    // если нужен прокси для обхода CORS
+    const proxy = 'https://cors-anywhere.herokuapp.com/';
+    url = proxy + url;
   }
 
-  loadGame(url);
+  await loadGame(url);
   gameUrl = url;
   closeSettingsModal();
 }
