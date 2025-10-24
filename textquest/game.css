@@ -1,0 +1,168 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+}
+
+#game-wrapper {
+  width: 100%;
+  height: 100%;
+  max-width: min(56.25vh, 100vw);
+  max-height: min(100vh, 177.78vw);
+  aspect-ratio: 9 / 16;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #111;
+  color: white;
+}
+
+#navbar {
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0,0,0,0.6);
+  padding: 0.5rem 0;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-btn img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.nav-btn:hover img {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.scene {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+#scene-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.5;
+}
+
+#scene-text-container {
+  flex: 1;
+  overflow-y: auto;
+  z-index: 1;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+#scene-text {
+  white-space: pre-wrap;
+  text-shadow: 0 0 5px black;
+  line-height: 1.4;
+}
+
+#buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1;
+}
+
+.button {
+  padding: 0.5rem;
+  border: 1px solid white;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.button:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+#scene-id {
+  font-size: 0.75rem;
+  text-align: right;
+  opacity: 0.75;
+  margin-top: 0.5rem;
+}
+
+/* --- Модальные окна --- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.hidden { display: none; }
+
+.modal-content {
+  background: #222;
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+}
+
+#save-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#save-list li {
+  padding: 0.5rem;
+  border-bottom: 1px solid #444;
+  cursor: pointer;
+}
+
+#save-list li:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* --- Кнопки по ширине --- */
+.button-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.button-long {
+  flex: 1 1 100%;
+}
+
+.button-medium {
+  flex: 1 1 48%;
+}
+
+.button-small {
+  flex: 1 1 22%;
+}
