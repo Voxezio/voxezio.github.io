@@ -9,18 +9,28 @@ async function loadGame(url = gameUrl) {
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Ошибка загрузки: ${url}`);
-    gameData = await res.json();
+    let text = await res.text();
 
-    const startChapter = Object.keys(gameData.chapters)[0];
-    const startScene = Object.keys(gameData.chapters[startChapter])[0];
+    // если строка в кавычках, убираем их
+    if (text.startsWith('"') && text.endsWith('"')) {
+      text = text.slice(1, -1);
+      // распарсим экранированные кавычки
+      text = text.replace(/\\"/g, '"');
+    }
+
+    gameData = JSON.parse(text);
+
+    const firstChapter = Object.keys(gameData.chapters)[0];
+    const firstScene = Object.keys(gameData.chapters[firstChapter])[0];
     const saved = localStorage.getItem('currentScene');
+    loadScene(saved || `${firstChapter}:${firstScene}`, true);
 
-    loadScene(saved || `${startChapter}:${startScene}`, true);
   } catch (e) {
     console.error(e);
     document.getElementById('scene-text').textContent = 'Ошибка загрузки JSON.';
   }
 }
+
 
 /* === Плавная смена сцены === */
 async function loadScene(path, instant = false) {
